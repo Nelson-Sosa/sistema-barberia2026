@@ -128,7 +128,7 @@ export function Personas() {
 
   return (
     <Layout
-      title="Personas"
+      title="Clientes"
       action={
         <Button size="sm" onClick={() => { setEditando(null); setModalOpen(true) }}>
           <Plus size={18} className="inline" /> Nuevo

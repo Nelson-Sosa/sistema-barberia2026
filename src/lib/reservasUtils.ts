@@ -332,8 +332,8 @@ export async function registrarCobroYClientePorReserva({
     }
   }
 
-  // No guardamos el cliente en la colección "Personas" para que solo aparezcan los clientes agregados manualmente.
-  // Si ya existía en Personas, conservamos sus datos para asociarlo al cobro.
+  // No guardamos el cliente en la colección "Clientes" para que solo aparezcan los clientes agregados manualmente.
+  // Si ya existía en Clientes, conservamos sus datos para asociarlo al cobro.
 
   let monto = opcionPrecio ?? 0
   if (!monto && opcionNombre) {

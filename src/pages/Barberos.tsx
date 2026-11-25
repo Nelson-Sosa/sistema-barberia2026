@@ -641,7 +641,7 @@ export function Barberos() {
                     onChange={(e) => setPermisoPersonas(e.target.checked)}
                     className="h-4 w-4 rounded border-slate-600 bg-slate-800 text-barber-500 focus:ring-barber-500 focus:ring-offset-slate-900"
                   />
-                  <span className="text-sm text-slate-200">Personas</span>
+                  <span className="text-sm text-slate-200">Clientes</span>
                 </label>
 
                 <label className="flex items-center gap-2 cursor-pointer">

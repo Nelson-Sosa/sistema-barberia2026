@@ -5,8 +5,8 @@ import { useAuth } from '../context/AuthContext'
 const allLinks = [
   { to: '/', icon: Home, label: 'Inicio', permiso: 'inicio' as const },
   { to: '/asistencia', icon: CreditCard, label: 'Cobro', permiso: 'cobros' as const },
-  { to: '/personas', icon: Users, label: 'Personas', permiso: 'personas' as const },
-  { to: '/planes', icon: CalendarDays, label: 'Planes', permiso: 'planes' as const },
+  { to: '/personas', icon: Users, label: 'Clientes', permiso: 'personas' as const },
+  { to: '/planes', icon: CalendarDays, label: 'Agendas', permiso: 'planes' as const },
   { to: '/reportes', icon: ClipboardList, label: 'Reportes', permiso: 'reportes' as const },
   { to: '/barberos', icon: Users2, label: 'Barberos', permiso: 'barberos' as const },
 ]
