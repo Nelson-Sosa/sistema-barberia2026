@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Función auxiliar para verificar si el usuario autenticado es el administrador oficial
+    function isAdmin() {
+      return request.auth != null && (
+        request.auth.token.email.lower() == 'timantti_barber@gmail.com' ||
+        request.auth.token.email in ['timantti_barber@gmail.com', 'Timantti_barber@gmail.com']
+      );
+    }
+
+    // Permitir acceso público a las jornadas de reserva (necesario para que los clientes puedan reservar turnos)
+    match /jornadasReservas/{jornadaId} {
+      allow read, write: if true;
+    }
+
+    // Opciones del cliente (servicios y precios): lectura pública, edición solo por admin
+    match /opcionesCliente/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Barberos: lectura pública (para que los clientes vean quién atiende), escritura solo por admin
+    match /barberos/{barberoId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Cobros: lectura y creación pública (al reservar turno), pero modificación y borrado por el admin autenticado
+    match /cobros/{cobroId} {
+      allow read, create: if true;
+      allow update, delete: if request.auth != null;
+    }
+
+    // Proteger todo lo demás (Clientes, Planes, Configuración) exclusivamente para el admin
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+  }
+}
