@@ -11,9 +11,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'Icono_nuevo.png', 'icon-192.png', 'icon-512.png', 'fondo-reservas.jpg'],
       manifest: {
-        name: 'Timontti Barber',
-        short_name: 'Timontti',
-        description: 'Reserva de turnos online - Timontti Barber',
+        name: 'Barbería Sistema',
+        short_name: 'Barbería',
+        description: 'Reserva de turnos online - Barbería Sistema',
         theme_color: '#0f172a',
         background_color: '#0f172a',
         display: 'standalone',

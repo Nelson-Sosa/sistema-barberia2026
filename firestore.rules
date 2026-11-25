@@ -1,12 +1,16 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Función auxiliar para verificar si el usuario autenticado es el administrador oficial
+    // Función auxiliar para verificar si el usuario autenticado es el administrador
+    // OPCIÓN RECOMENDADA: Usar Custom Claims (request.auth.token.role == 'admin')
+    // Para configurar: https://firebase.google.com/docs/auth/admin/custom-claims
     function isAdmin() {
-      return request.auth != null && (
-        request.auth.token.email.lower() == 'timantti_barber@gmail.com' ||
-        request.auth.token.email in ['timantti_barber@gmail.com', 'Timantti_barber@gmail.com']
-      );
+      // Opción A: Custom Claims (Recomendado)
+      // return request.auth != null && request.auth.token.role == 'admin';
+      
+      // Opción B: Email específico (Reemplaza con tu email de admin)
+      return request.auth != null && 
+        request.auth.token.email.lower() == 'admin@barberiasistema.com';
     }
 
     // Permitir acceso público a las jornadas de reserva (necesario para que los clientes puedan reservar turnos)

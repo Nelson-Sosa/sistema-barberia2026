@@ -430,7 +430,7 @@ export function estaEnAlcance(fecha: string, alcanceDias: number): boolean {
  * Genera un ID único de sesión para el cliente (se guarda en sessionStorage)
  */
 export function obtenerIdSesionCliente(): string {
-  const STORAGE_KEY = 'timontti_session_id'
+  const STORAGE_KEY = 'barberia_session_id'
   let sessionId = sessionStorage.getItem(STORAGE_KEY)
   
   if (!sessionId) {

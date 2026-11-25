@@ -1,10 +1,6 @@
-# 💈 Timontti Barber
+# 💈 Barbería Sistema
 
 Sistema completo de gestión de barbería con reservas online, control de planes y asistencia.
-
-## 🌐 Aplicación Desplegada
-
-**🔗 URL de Producción:** [https://timonttibarberr.web.app](https://timonttibarberr.web.app)
 
 ## 🚀 Características
 
@@ -16,16 +12,12 @@ Sistema completo de gestión de barbería con reservas online, control de planes
 - 📱 **PWA**: Aplicación web progresiva instalable
 - 🔐 **Autenticación Segura**: Sistema de login con Firebase Auth
 - 💬 **Integración WhatsApp**: Notificaciones automáticas
-
-## 🔐 Acceso de Administrador
-
-**Email:** `Timantti_barber@gmail.com`  
-**Contraseña:** `timantti_123#$%jy`
+- 🧑‍💼 **Multi-Barbero**: Soporte para múltiples barberos con agendas independientes
 
 ## 🛠️ Tecnologías
 
-- **Frontend**: React + TypeScript + Vite
-- **Estilos**: TailwindCSS
+- **Frontend**: React 19.1 + TypeScript + Vite
+- **Estilos**: TailwindCSS v4
 - **Base de Datos**: Firebase Firestore
 - **Autenticación**: Firebase Auth
 - **Hosting**: Firebase Hosting
@@ -33,85 +25,258 @@ Sistema completo de gestión de barbería con reservas online, control de planes
 - **Exportación**: XLSX (Excel)
 - **Fechas**: date-fns
 
-## 📦 Instalación Local
+## 📦 Instalación
 
-1. **Clonar el repositorio**
+### 1. Clonar el repositorio
+
 ```bash
-git clone https://github.com/sebastianJhuliano/Timontti_Barber.git
-cd Timontti_Barber
+git clone <tu-repositorio>
+cd Barberia-Sistema
 ```
 
-2. **Instalar dependencias**
+### 2. Instalar dependencias
+
 ```bash
 npm install
 ```
 
-3. **Configurar variables de entorno**
-El archivo `.env` ya está configurado con las credenciales de Firebase.
+### 3. Configurar Firebase
 
-4. **Ejecutar en modo desarrollo**
+#### a) Crear proyecto en Firebase Console
+
+1. Ve a [Firebase Console](https://console.firebase.google.com/)
+2. Crea un nuevo proyecto
+3. Habilita **Authentication** (método Email/Password)
+4. Habilita **Firestore Database**
+5. Ve a Project Settings > General y copia las credenciales
+
+#### b) Configurar variables de entorno
+
+1. Duplica el archivo `.env.example` y renómbralo a `.env`
+2. Completa las variables con tus credenciales de Firebase:
+
+```env
+VITE_FIREBASE_API_KEY=tu_api_key_aqui
+VITE_FIREBASE_AUTH_DOMAIN=tu-proyecto.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=tu-proyecto-id
+VITE_FIREBASE_STORAGE_BUCKET=tu-proyecto.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=tu_messaging_sender_id
+VITE_FIREBASE_APP_ID=tu_app_id
+VITE_ADMIN_EMAIL=admin@tudominio.com
+```
+
+#### c) Configurar reglas de Firestore
+
+Copia el contenido de `firestore.rules` a las reglas de tu proyecto en Firebase Console.
+
+**IMPORTANTE:** Actualiza el email de administrador en `firestore.rules`:
+
+```javascript
+function isAdmin() {
+  return request.auth != null && 
+    request.auth.token.email.lower() == 'tu-email-admin@ejemplo.com';
+}
+```
+
+O mejor aún, usa **Custom Claims** (recomendado):
+
+```javascript
+function isAdmin() {
+  return request.auth != null && request.auth.token.role == 'admin';
+}
+```
+
+[Guía de Custom Claims](https://firebase.google.com/docs/auth/admin/custom-claims)
+
+### 4. Crear usuario administrador
+
+Después de configurar Firebase Auth, crea tu usuario administrador:
+
+1. Ve a Firebase Console > Authentication > Users
+2. Click en "Add user"
+3. Ingresa el email que definiste en `VITE_ADMIN_EMAIL`
+4. Establece una contraseña segura
+5. (Opcional) Si usas Custom Claims, asigna el rol 'admin' mediante Firebase Admin SDK
+
+### 5. Configurar Firebase Hosting (Opcional)
+
+Si deseas desplegar en Firebase Hosting:
+
+1. Instala Firebase CLI globalmente:
+   ```bash
+   npm install -g firebase-tools
+   ```
+
+2. Autentícate:
+   ```bash
+   firebase login
+   ```
+
+3. Actualiza `.firebaserc` con tu Project ID:
+   ```json
+   {
+     "projects": {
+       "default": "tu-proyecto-id"
+     }
+   }
+   ```
+
+## 🚀 Desarrollo
+
+### Ejecutar en modo desarrollo
+
 ```bash
 npm run dev
 ```
 
-5. **Construir para producción**
+La aplicación estará disponible en `http://localhost:5173`
+
+### Construir para producción
+
 ```bash
 npm run build
 ```
 
-## 🔥 Firebase
+Los archivos optimizados se generarán en la carpeta `dist/`
 
-### Proyecto Firebase
-- **Project ID**: `timonttibarberr`
-- **Console**: [Ver en Firebase](https://console.firebase.google.com/project/timonttibarberr/overview)
-
-### Colecciones de Firestore
-- `clientes` - Información de clientes
-- `planes` - Planes de membresía
-- `cobros` - Registro de pagos
-- `jornadasReservas` - Turnos y reservas
-- `opcionesCliente` - Servicios y precios configurables
-
-## 🚀 Despliegue
+### Vista previa del build
 
 ```bash
-# Construir y desplegar a Firebase Hosting
+npm run preview
+```
+
+## 🔥 Despliegue en Firebase
+
+```bash
+# Construir la aplicación
 npm run build
+
+# Desplegar a Firebase Hosting
 firebase deploy
 ```
 
-## 📱 Características PWA
+## 🗂️ Estructura del Proyecto
+
+```
+Barberia-Sistema/
+├── src/
+│   ├── components/        # Componentes reutilizables
+│   │   └── ui/           # Componentes de UI básicos
+│   ├── context/          # Contextos de React (Auth, Barber)
+│   ├── hooks/            # Custom hooks
+│   ├── lib/              # Utilidades y configuración
+│   │   ├── firebase.ts   # Configuración de Firebase
+│   │   ├── api.ts        # Funciones de API
+│   │   ├── types.ts      # Tipos TypeScript
+│   │   └── ...
+│   ├── pages/            # Páginas principales
+│   └── main.tsx          # Punto de entrada
+├── public/               # Archivos estáticos
+├── .env                  # Variables de entorno (NO COMMITEAR)
+├── .env.example          # Plantilla de variables de entorno
+├── firebase.json         # Configuración Firebase
+├── firestore.rules       # Reglas de seguridad Firestore
+└── package.json
+```
+
+## 🔐 Seguridad
+
+### Variables de Entorno
+
+- **NUNCA** commitees el archivo `.env` al repositorio
+- Usa `.env.example` como plantilla para otros desarrolladores
+- En producción, configura las variables de entorno en tu plataforma de hosting
+
+### Reglas de Firestore
+
+Las reglas de seguridad están configuradas para:
+
+- ✅ Acceso público a reservas (lectura/escritura para permitir reservas de clientes)
+- ✅ Solo admin puede modificar clientes, planes y barberos
+- ✅ Cobros protegidos por autenticación
+- ✅ Lectura pública de opciones del cliente (servicios y precios)
+
+**Revisa y ajusta** `firestore.rules` según tus necesidades específicas de seguridad.
+
+## 📱 PWA (Progressive Web App)
 
 La aplicación puede instalarse como app nativa en dispositivos móviles y de escritorio:
-- ✅ Funciona offline
+
+- ✅ Funciona offline (caché de recursos estáticos)
 - ✅ Icono en pantalla principal
-- ✅ Notificaciones push (próximamente)
+- ✅ Experiencia de app nativa
+- ✅ Actualizaciones automáticas
+
+Los usuarios verán un banner de instalación al visitar la aplicación desde dispositivos compatibles.
+
+## 📊 Colecciones de Firestore
+
+El sistema utiliza las siguientes colecciones:
+
+- **`clientes`** - Información de clientes registrados
+- **`planes`** - Planes de membresía activos
+- **`cobros`** - Registro de pagos y transacciones
+- **`jornadasReservas`** - Turnos y reservas por día
+- **`opcionesCliente`** - Servicios, precios y configuración de redes sociales
+- **`barberos`** - Información de los barberos del sistema
+
+## 🎨 Personalización
+
+### Cambiar colores del tema
+
+Edita `src/index.css` y busca las variables CSS:
+
+```css
+:root {
+  --color-primary: #0f172a;
+  /* Otros colores... */
+}
+```
+
+### Cambiar logo/icono
+
+Reemplaza los siguientes archivos en `public/`:
+
+- `Icono_nuevo.png` - Icono principal
+- `icon-192.png` - Icono PWA 192x192
+- `icon-512.png` - Icono PWA 512x512
+- `favicon.svg` - Favicon
+
+Luego actualiza las referencias en `index.html` y `vite.config.ts`
 
 ## 📝 Scripts Disponibles
 
 ```bash
-npm run dev          # Servidor de desarrollo
+npm run dev          # Servidor de desarrollo con hot reload
 npm run build        # Construir para producción
-npm run preview      # Vista previa del build
-firebase deploy      # Desplegar a Firebase
+npm run preview      # Vista previa del build de producción
+firebase deploy      # Desplegar a Firebase Hosting (requiere Firebase CLI)
 ```
 
-## 🔒 Seguridad
+## 🐛 Troubleshooting
 
-Las reglas de Firestore están configuradas para:
-- ✅ Acceso público a reservas (lectura/escritura)
-- ✅ Solo admin puede modificar clientes, planes y configuración
-- ✅ Cobros protegidos por autenticación
+### Error: "Firebase not configured"
 
-## 👥 Colaboradores
+- Verifica que hayas creado el archivo `.env` con todas las variables necesarias
+- Asegúrate de que las credenciales sean correctas
 
-- **Sebastian Jhuliano** - Desarrollador Principal
-- **Nelson Sosa** - Colaborador
+### Error: "Permission denied" en Firestore
+
+- Revisa las reglas de seguridad en `firestore.rules`
+- Verifica que el email del admin coincida con el configurado
+- Asegúrate de estar autenticado correctamente
+
+### El administrador no puede acceder al panel
+
+- Verifica que `VITE_ADMIN_EMAIL` en `.env` coincida con el email de tu usuario
+- Verifica que el email también esté actualizado en `firestore.rules`
+- Revisa la consola del navegador para errores de autenticación
 
 ## 📄 Licencia
 
-Proyecto privado - Todos los derechos reservados
+Proyecto privado - Personaliza según tus necesidades
 
 ---
 
-**Última actualización:** Noviembre 2026
+**Desarrollado con ❤️ para barberías modernas**
+
