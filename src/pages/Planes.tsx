@@ -1,4 +1,4 @@
-import { AlertTriangle, ArrowLeft, CalendarPlus, Clock, Pencil, Plus, Scissors, Settings, Trash2 } from 'lucide-react'
+import { ArrowLeft, CalendarPlus, Clock, Pencil, Plus, Scissors, Trash2 } from 'lucide-react'
 import { useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { addMonths, format, parseISO } from 'date-fns'
 import { useSearchParams } from 'react-router-dom'
@@ -17,7 +17,7 @@ import { useBarberData } from '../hooks/useBarberData'
 import { usePagination } from '../hooks/usePagination'
 import { api } from '../lib/api'
 import { crearCobroDesdePlan } from '../lib/cobros'
-import { formatearMoneda, hoyISO, planEstaActivo, planPorVencer, planSinDuracion, planVenceHoy } from '../lib/dates'
+import { formatearMoneda, hoyISO, planEstaActivo, planSinDuracion } from '../lib/dates'
 import { agruparJornadas, type GrupoJornada, obtenerNombreDiaConFecha } from '../lib/reservasUtils'
 import type { Cobro, JornadaReservas, OpcionCliente, Plan, PlanConCliente, PlanTipoConfig, TurnoSlot, Barbero } from '../lib/types'
 
@@ -41,10 +41,12 @@ export function Planes() {
   const [agendaSemanalModalOpen, setAgendaSemanalModalOpen] = useState(false)
   const [barberoParaConfigurar, setBarberoParaConfigurar] = useState<Barbero | undefined>(undefined)
 
-  // Leer el parámetro 'tab' de la URL para activar automáticamente la pestaña
-  const tabParam = searchParams.get('tab')
+  // ⚠️ FUNCIONALIDAD DE PLANES DESHABILITADA
+  // La pestaña "Planes activos" está oculta para simplificar la interfaz
+  // Para rehabilitarla, descomentar la línea siguiente y cambiar el valor inicial
+  // const tabParam = searchParams.get('tab')
   const [filtroTab, setFiltroTab] = useState<'activos' | 'reservas'>(
-    tabParam === 'activos' ? 'activos' : 'reservas'
+    'reservas' // Forzar siempre a 'reservas'
   )
   const [refreshTick, setRefreshTick] = useState(0)
 
@@ -163,12 +165,16 @@ export function Planes() {
     [planes, clientes],
   )
 
+  // ⚠️ VARIABLE DESHABILITADA (alertas de planes por vencer)
+  // Para rehabilitar, descomentar las siguientes líneas:
+  /*
   const alertas = planesConCliente.filter((p) => {
     const tipoConfig = planTipos.find((t) => t.id === p.tipo)
     const sinDuracion = tipoConfig !== undefined ? tipoConfig.duracion === null : planSinDuracion(p)
     if (sinDuracion) return false
     return planEstaActivo(p) && (planVenceHoy(p) || planPorVencer(p, 3))
   })
+  */
 
   const filtrados = useMemo(() => {
     const list = planesConCliente.filter((p) => {
@@ -561,18 +567,21 @@ export function Planes() {
 
   return (
     <Layout
-      title="Planes y Reservas"
+      title="Agendas y Reservas"
       action={
         <div className="flex gap-1.5">
+          {/* ⚠️ BOTONES DE PLANES DESHABILITADOS - Para rehabilitar, descomentar estas líneas
           <Button size="sm" variant="secondary" onClick={() => setVistaConfig(true)}>
             <Settings size={16} />
           </Button>
           <Button size="sm" onClick={() => { setEditando(null); setModalOpen(true) }}>
             <CalendarPlus size={18} className="inline" /> Nuevo plan
           </Button>
+          */}
         </div>
       }
     >
+      {/* ⚠️ ALERTA DE PLANES POR VENCER - DESHABILITADA
       {alertas.length > 0 && (
         <div className="mb-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2">
           <div className="flex items-center gap-2 text-amber-300">
@@ -588,8 +597,9 @@ export function Planes() {
           </div>
         </div>
       )}
+      */}
 
-      {/* Tabs de Filtro: Planes Activos vs Lista de Agendas */}
+      {/* ⚠️ PESTAÑAS DESHABILITADAS - Solo se muestra "Lista de Agendas"
       <div className="mb-4 flex rounded-xl bg-slate-900 p-1 border border-slate-800">
         <button
           type="button"
@@ -614,9 +624,10 @@ export function Planes() {
           📅 Lista de Agendas ({gruposJornadas.length})
         </button>
       </div>
+      */}
 
-      {/* VISTA 1: PLANES ACTIVOS */}
-      {filtroTab === 'activos' && (
+      {/* VISTA 1: PLANES ACTIVOS - COMPLETAMENTE OCULTA */}
+      {filtroTab === 'activos' && false && (
         <>
           <div className="mb-4">
             <SearchInput
